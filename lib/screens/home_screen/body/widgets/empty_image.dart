@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
-import 'package:for21day/variables/text_styles.dart';
+import 'package:Todo/variables/text_styles.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class EmptyIcon extends StatelessWidget {
-  const EmptyIcon({Key? key}) : super(key: key);
+class EmptyImage extends StatelessWidget {
+  const EmptyImage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,33 +1,43 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:for21day/helpers/store_helper.dart';
-import 'package:for21day/models/category.dart';
-import 'package:for21day/objectbox.g.dart';
-import 'package:for21day/variables/colors.dart';
+import 'package:Todo/controllers/note_controller.dart';
+import 'package:Todo/helpers/store_helper.dart';
+import 'package:Todo/models/category.dart';
+import 'package:Todo/objectbox.g.dart';
+import 'package:Todo/variables/colors.dart';
+import 'package:provider/provider.dart';
 
 class CategoryController extends ChangeNotifier {
   CategoryController() {
-    if (StaticStore.store.box<Category>().isEmpty()) {
-      addDefultCategories();
-    } else {
-      getAllCategories();
-    }
+    addDefultCategories();
   }
 
   Category? selectedCategory;
 
-  List<Category> categories = [];
+  List<Category> _categories = [];
+  List<Category> get categories => _categories;
 
   TextEditingController addCategoryController = TextEditingController();
 
+  //* we get categories in 3 sitiuations first in the start of the application
+  //* second when we change the category 
+  //* third when we open the add note page
   getAllCategories() async {
-    categories = StaticStore.store.box<Category>().getAll();
-    if (categories.isNotEmpty) {
-      selectedCategory = categories.first;
+    _categories = StaticStore.store.box<Category>().getAll();
+    if (selectedCategory == null) {
+      if (categories.isNotEmpty) {
+        selectedCategory = categories.first;
+      }
+    } else {
+      selectedCategory = categories
+          .firstWhere((element) => element.id == selectedCategory!.id);
     }
     notifyListeners();
   }
 
+  //? adding category and its statemanagement and validation
   addCateogry(BuildContext context) async {
     if (addCategoryController.text.isNotEmpty) {
       Category category =
@@ -56,16 +66,27 @@ class CategoryController extends ChangeNotifier {
     StaticStore.store.box<Category>().remove(category.id);
     notifyListeners();
   }
-
-  selectCategory(Category category) {
-    selectedCategory = category;
+  
+  selectCategory(Category category, BuildContext context) {
+    getAllCategories();
+    selectedCategory =
+        categories.firstWhere((element) => element.id == category.id);
+    context.read<NoteController>().getNotesFromCategory(context);
+    print(category.notes);
     notifyListeners();
   }
 
   addDefultCategories() {
-    categories.add(Category(name: 'All Lists', addTime: DateTime.now()));
-    categories.add(Category(name: 'done', addTime: DateTime.now()));
-
-    StaticStore.store.box<Category>().putMany(categories);
+    List<Category> databaseCategories =
+        StaticStore.store.box<Category>().getAll();
+    if (!databaseCategories.any((element) =>
+        element.name.toLowerCase() == 'all lists' ||
+        element.name.toLowerCase() == 'done')) {
+      print('always true?');
+      categories.add(Category(name: 'All Lists', addTime: DateTime.now()));
+      categories.add(Category(name: 'done', addTime: DateTime.now()));
+      StaticStore.store.box<Category>().putMany(categories);
+    }
+    getAllCategories();
   }
 }

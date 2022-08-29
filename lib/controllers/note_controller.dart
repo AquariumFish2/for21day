@@ -1,46 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:for21day/controllers/add_todo_controller.dart';
-import 'package:for21day/controllers/category_controller.dart';
-import 'package:for21day/helpers/store_helper.dart';
-import 'package:for21day/models/note.dart';
-import 'package:for21day/screens/add_todo_screen/add_todo_screen.dart';
+import 'package:Todo/controllers/add_todo_controller.dart';
+import 'package:Todo/controllers/category_controller.dart';
+import 'package:Todo/controllers/notification_controller.dart';
+import 'package:Todo/helpers/store_helper.dart';
+import 'package:Todo/models/note.dart';
+import 'package:Todo/screens/add_todo_screen/add_todo_screen.dart';
 import 'package:provider/provider.dart';
 import '../models/category.dart';
 
 class NoteController extends ChangeNotifier {
+  NoteController(BuildContext context) {
+    getNotes(context);
+  }
   Note? selectedNote;
 
   List<Note> _notes = [];
 
   List<Note> get notes => _notes;
 
-  addNote(Note note, BuildContext context) async {
-    note.category.target = context.read<CategoryController>().selectedCategory;
-    StaticStore.store.box<Note>().put(note);
-    StaticStore.store
-        .box<Category>()
-        .put(context.read<CategoryController>().selectedCategory!);
+  int addNote(Note note, BuildContext context) {
+    note.category.targetId =
+        context.read<CategoryController>().selectedCategory!.id;
+    int id = StaticStore.store.box<Note>().put(note);
     _notes = StaticStore.store.box<Note>().getAll();
     notifyListeners();
+    return id;
   }
 
   getNotes(BuildContext context) {
     Category? category = context.read<CategoryController>().selectedCategory;
     if (category != null &&
-        category.name != 'done' &&
-        category.name != 'All Lists') {
+        category.name.toLowerCase() != 'done' &&
+        category.name.toLowerCase() != 'all lists') {
       for (var element in category.notes) {
         if (!element.isDone) {
           notes.add(element);
         }
       }
-    } else if (category != null && category.name == 'done') {
+    } else if (category != null && category.name.toLowerCase() == 'done') {
+      print('done');
       for (var element in category.notes) {
         if (element.isDone) {
           notes.add(element);
         }
       }
-    } else if ((category != null && category.name == 'All Lists') ||
+    } else if ((category != null &&
+            category.name.toLowerCase() == 'all lists') ||
         category == null) {
       _notes = StaticStore.store.box<Note>().getAll();
     }
@@ -64,20 +69,32 @@ class NoteController extends ChangeNotifier {
     notifyListeners();
   }
 
-  deleteNote(Note note, int index) async {
+  deleteNote(Note note, BuildContext context) async {
     StaticStore.store.box<Note>().remove(note.id);
     _notes = StaticStore.store.box<Note>().getAll();
+    context.read<NotificationController>().service.cancelNotification(note.id);
     notifyListeners();
   }
 
-  doneCheckBox(Note note) {
-    note.isDone = !note.isDone;
-    StaticStore.store.box<Note>().put(note);
-    _notes = StaticStore.store.box<Note>().getAll();
-    notifyListeners();
+  doneCheckBox(Note note, BuildContext context) {
+    if (note.dueDate.isAfter(DateTime.now())) {
+      note.isDone = !note.isDone;
+      if (note.isDone) {
+        context
+            .read<NotificationController>()
+            .service
+            .cancelNotification(note.id);
+      } else {
+        context.read<NotificationController>().showNotification(note, note.id);
+      }
+      StaticStore.store.box<Note>().put(note);
+      getNotesFromCategory(context);
+      notifyListeners();
+    }
   }
 
   getNotesFromCategory(BuildContext context) {
+    context.read<CategoryController>().getAllCategories();
     Category? category = context.read<CategoryController>().selectedCategory;
     _notes = [];
     if (category != null &&
@@ -85,6 +102,7 @@ class NoteController extends ChangeNotifier {
         category.name != 'All Lists') {
       print(category.notes);
       _notes = category.notes;
+      notifyListeners();
     } else if (category != null && category.name == 'done') {
       for (var element in StaticStore.store.box<Note>().getAll()) {
         if (element.isDone) {

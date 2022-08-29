@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:for21day/controllers/add_todo_controller.dart';
-import 'package:for21day/controllers/note_controller.dart';
-import 'package:for21day/variables/colors.dart';
-import 'package:for21day/variables/text_styles.dart';
+import 'package:Todo/controllers/add_todo_controller.dart';
+import 'package:Todo/controllers/note_controller.dart';
+import 'package:Todo/variables/colors.dart';
+import 'package:Todo/variables/text_styles.dart';
 import 'package:provider/provider.dart';
 
 class SaveButton extends StatelessWidget {
@@ -18,7 +18,6 @@ class SaveButton extends StatelessWidget {
       ),
       onPressed: () async {
         context.read<AddTodoController>().onSave(formKey, context);
-        context.read<NoteController>().getNotes(context);
       },
       child: SizedBox(
         width: double.infinity,

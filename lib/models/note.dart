@@ -1,4 +1,4 @@
-import 'package:for21day/models/category.dart';
+import 'package:Todo/models/category.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:for21day/helpers/store_helper.dart';
+import 'package:Todo/controllers/note_controller.dart';
+import 'package:Todo/helpers/store_helper.dart';
+import 'package:provider/provider.dart';
 
 import '../models/note.dart';
 
@@ -30,9 +32,10 @@ class SearchController extends ChangeNotifier {
     notifyListeners();
   }
 
-  deleteNote(Note note) {
+  deleteNote(Note note,BuildContext context) {
     _allNotes.remove(note);
     _searchedNotes.remove(note);
+    context.read<NoteController>().deleteNote(note,context);
     notifyListeners();
   }
 }

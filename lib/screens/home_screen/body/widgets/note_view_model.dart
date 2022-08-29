@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:for21day/controllers/note_controller.dart';
-import 'package:for21day/controllers/search_controller.dart';
-import 'package:for21day/variables/colors.dart';
-import 'package:for21day/variables/text_styles.dart';
+import 'package:Todo/controllers/note_controller.dart';
+import 'package:Todo/controllers/search_controller.dart';
+import 'package:Todo/variables/colors.dart';
+import 'package:Todo/variables/text_styles.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -24,10 +24,6 @@ class NoteViewModel extends StatelessWidget {
           onTap: (() {
             noteController.editNote(note, context);
           }),
-          // onTap: () => (noteController.onSelecting
-          //     ? noteController.selectingNoteAfterLongSelecting(note)
-          //     : noteController.onNoteSelect(note, context)),
-          // onLongPress: () => noteController.toggleSelecting(note),
           child: SizedBox(
             height: 100,
             child: Card(
@@ -42,7 +38,7 @@ class NoteViewModel extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: () {
-                        context.read<NoteController>().doneCheckBox(note);
+                        context.read<NoteController>().doneCheckBox(note,context);
                       },
                       icon: Icon(
                         (!note.isDone)
@@ -74,9 +70,11 @@ class NoteViewModel extends StatelessWidget {
                     IconButton(
                       onPressed: () {
                         if (onSearchMode != null) {
-                          context.read<SearchController>().deleteNote(note);
+                          context
+                              .read<SearchController>()
+                              .deleteNote(note, context);
                         }
-                        context.read<NoteController>().deleteNote(note, index);
+                        context.read<NoteController>().deleteNote(note,context);
                       },
                       icon: const Icon(
                         Icons.delete,

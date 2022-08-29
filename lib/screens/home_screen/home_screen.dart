@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:for21day/controllers/note_controller.dart';
-import 'package:for21day/controllers/search_controller.dart';
-import 'package:for21day/screens/add_todo_screen/add_todo_screen.dart';
-import 'package:for21day/screens/home_screen/body/search_widgets/back_icon.dart';
-import 'package:for21day/screens/home_screen/body/search_widgets/search_list.dart';
-import 'package:for21day/screens/home_screen/body/search_widgets/search_text_field.dart';
-import 'package:for21day/screens/home_screen/body/widgets/animated_list.dart';
-import 'package:for21day/screens/home_screen/body/widgets/categories_drop_down_button.dart';
-import 'package:for21day/screens/home_screen/body/widgets/empty_icon.dart';
+import 'package:Todo/controllers/note_controller.dart';
+import 'package:Todo/controllers/search_controller.dart';
+import 'package:Todo/screens/add_todo_screen/add_todo_screen.dart';
+import 'package:Todo/screens/home_screen/body/search_widgets/back_icon.dart';
+import 'package:Todo/screens/home_screen/body/search_widgets/search_list.dart';
+import 'package:Todo/screens/home_screen/body/search_widgets/search_text_field.dart';
+import 'package:Todo/screens/home_screen/body/widgets/notes_list.dart';
+import 'package:Todo/screens/home_screen/body/widgets/categories_drop_down_button.dart';
+import 'package:Todo/screens/home_screen/body/widgets/empty_image.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -41,15 +41,9 @@ class HomeScreen extends StatelessWidget {
                 SearchList(),
               ],
             )
-          : FutureBuilder(
-              future: context.read<NoteController>().getNotes(context),
-              builder: (context, _) {
-                if (context.watch<NoteController>().notes.isNotEmpty) {
-                  return const NotesAnimatedList();
-                } else {
-                  return const EmptyIcon();
-                }
-              }),
+          : (context.watch<NoteController>().notes.isNotEmpty)
+              ? const NotesList()
+              : const EmptyImage(),
       floatingActionButton: (!context.watch<SearchController>().search)
           ? SizedBox(
               height: 60,

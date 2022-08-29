@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:for21day/controllers/category_controller.dart';
-import 'package:for21day/controllers/note_controller.dart';
-import 'package:for21day/models/category.dart';
-import 'package:for21day/variables/colors.dart';
-import 'package:for21day/variables/text_styles.dart';
+import 'package:Todo/controllers/category_controller.dart';
+import 'package:Todo/controllers/note_controller.dart';
+import 'package:Todo/models/category.dart';
+import 'package:Todo/variables/colors.dart';
+import 'package:Todo/variables/text_styles.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesDropDownButton extends StatelessWidget {
@@ -36,8 +36,7 @@ class CategoriesDropDownButton extends StatelessWidget {
         ),
         value: categoryController.selectedCategory,
         onChanged: (v) {
-          categoryController.selectCategory(v as Category);
-          context.read<NoteController>().getNotesFromCategory(context);
+          categoryController.selectCategory(v as Category, context);
         },
       );
     });

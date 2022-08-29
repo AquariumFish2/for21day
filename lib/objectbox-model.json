@@ -4,23 +4,23 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:1506650471341247010",
-      "lastPropertyId": "3:508412442670195606",
+      "id": "1:2245032913020965502",
+      "lastPropertyId": "3:6345345979119243661",
       "name": "Category",
       "properties": [
         {
-          "id": "1:6855914164576235850",
+          "id": "1:4531833613288322495",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:2204274811341293562",
+          "id": "2:2115689179082013380",
           "name": "name",
           "type": 9
         },
         {
-          "id": "3:508412442670195606",
+          "id": "3:6345345979119243661",
           "name": "addTime",
           "type": 10
         }
@@ -28,55 +28,55 @@
       "relations": []
     },
     {
-      "id": "2:6757674412666348685",
-      "lastPropertyId": "7:7697863442507383534",
+      "id": "2:8080901668258035391",
+      "lastPropertyId": "7:6326387507491264020",
       "name": "Note",
       "properties": [
         {
-          "id": "1:306512143586389451",
+          "id": "1:7410372646555580749",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:9009162872063045257",
+          "id": "2:8594772438348318397",
           "name": "data",
           "type": 9
         },
         {
-          "id": "3:714978972398998130",
+          "id": "3:4191023267689112879",
           "name": "addDate",
           "type": 10
         },
         {
-          "id": "4:3682863076651852760",
+          "id": "4:5864318801047519503",
           "name": "dueDate",
           "type": 10
         },
         {
-          "id": "5:7065013727251594556",
-          "name": "categoryId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "1:7868489815282846966",
-          "relationTarget": "Category"
+          "id": "5:5256682116376502868",
+          "name": "time",
+          "type": 9
         },
         {
-          "id": "6:3450414716264961476",
+          "id": "6:5662722623082263459",
           "name": "isDone",
           "type": 1
         },
         {
-          "id": "7:7697863442507383534",
-          "name": "time",
-          "type": 9
+          "id": "7:6326387507491264020",
+          "name": "categoryId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:469495781288228279",
+          "relationTarget": "Category"
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "2:6757674412666348685",
-  "lastIndexId": "1:7868489815282846966",
+  "lastEntityId": "2:8080901668258035391",
+  "lastIndexId": "1:469495781288228279",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

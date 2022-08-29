@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:for21day/controllers/category_controller.dart';
-import 'package:for21day/models/category.dart';
-import 'package:for21day/screens/add_todo_screen/widgets/add_category_dialoge.dart';
-import 'package:for21day/screens/add_todo_screen/widgets/info_text.dart';
-import 'package:for21day/variables/colors.dart';
+import 'package:Todo/controllers/category_controller.dart';
+import 'package:Todo/models/category.dart';
+import 'package:Todo/screens/add_todo_screen/widgets/add_category_dialoge.dart';
+import 'package:Todo/screens/add_todo_screen/widgets/info_text.dart';
+import 'package:Todo/variables/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -54,8 +54,8 @@ class AddTODOCategoryList extends StatelessWidget {
                             ),
                           )
                           .toList(),
-                      onChanged: (v) =>
-                          categoryController.selectCategory(v as Category),
+                      onChanged: (v) => categoryController.selectCategory(
+                          v as Category, context),
                     ),
                   ),
                 ),

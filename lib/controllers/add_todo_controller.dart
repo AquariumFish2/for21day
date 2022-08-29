@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:for21day/controllers/category_controller.dart';
-import 'package:for21day/controllers/note_controller.dart';
-import 'package:for21day/models/note.dart';
-import 'package:for21day/screens/home_screen/home_screen.dart';
+import 'package:Todo/controllers/category_controller.dart';
+import 'package:Todo/controllers/note_controller.dart';
+import 'package:Todo/controllers/notification_controller.dart';
+import 'package:Todo/models/note.dart';
+import 'package:Todo/screens/home_screen/home_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +55,7 @@ class AddTodoController extends ChangeNotifier {
 
   //* onsave we use the note controller to save the note to the db then we get all the notes so the new
   //* note can be displayed in the runtime
-  onSave(GlobalKey<FormState> formKey, BuildContext context) {
+  onSave(GlobalKey<FormState> formKey, BuildContext context) async {
     if (formKey.currentState!.validate()) {
       if (context.read<NoteController>().selectedNote != null) {
         context.read<NoteController>().selectedNote!.data =
@@ -70,19 +71,23 @@ class AddTodoController extends ChangeNotifier {
         context.read<NoteController>().saveEdit();
         // context.read<NoteController>().selectedNote = null,
       } else {
-        context.read<NoteController>().addNote(
-            Note(
-              data: todoNameController.text,
-              addDate: DateTime.now(),
-              dueDate: DateTime.parse(dateController.text).add(
-                Duration(
-                  minutes: getMinutesFromString(),
-                  hours: getHoursFromString(),
-                ),
-              ),
-              time: timeController.text,
+        Note note = Note(
+          data: todoNameController.text,
+          addDate: DateTime.now(),
+          dueDate: DateTime.parse(dateController.text).add(
+            Duration(
+              minutes: getMinutesFromString(),
+              hours: getHoursFromString(),
             ),
-            context);
+          ),
+          time: timeController.text,
+        );
+
+        //? adding notification method
+        int id = context.read<NoteController>().addNote(note, context);
+        if (note.dueDate.isAfter(DateTime.now())) {
+          context.read<NotificationController>().showNotification(note, id);
+        }
       }
 
       //? after adding the note to the database we navigate back and give initial values to the controllers
@@ -90,6 +95,7 @@ class AddTodoController extends ChangeNotifier {
           context,
           MaterialPageRoute(builder: ((context) => const HomeScreen())),
           (route) => false);
+      context.read<NoteController>().getNotesFromCategory(context);
       formClear();
     }
   }

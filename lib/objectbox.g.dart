@@ -20,23 +20,23 @@ export 'package:objectbox/objectbox.dart'; // so that callers only have to impor
 
 final _entities = <ModelEntity>[
   ModelEntity(
-      id: const IdUid(1, 1506650471341247010),
+      id: const IdUid(1, 2245032913020965502),
       name: 'Category',
-      lastPropertyId: const IdUid(3, 508412442670195606),
+      lastPropertyId: const IdUid(3, 6345345979119243661),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
-            id: const IdUid(1, 6855914164576235850),
+            id: const IdUid(1, 4531833613288322495),
             name: 'id',
             type: 6,
             flags: 1),
         ModelProperty(
-            id: const IdUid(2, 2204274811341293562),
+            id: const IdUid(2, 2115689179082013380),
             name: 'name',
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(3, 508412442670195606),
+            id: const IdUid(3, 6345345979119243661),
             name: 'addTime',
             type: 10,
             flags: 0)
@@ -46,48 +46,48 @@ final _entities = <ModelEntity>[
         ModelBacklink(name: 'notes', srcEntity: 'Note', srcField: '')
       ]),
   ModelEntity(
-      id: const IdUid(2, 6757674412666348685),
+      id: const IdUid(2, 8080901668258035391),
       name: 'Note',
-      lastPropertyId: const IdUid(7, 7697863442507383534),
+      lastPropertyId: const IdUid(7, 6326387507491264020),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
-            id: const IdUid(1, 306512143586389451),
+            id: const IdUid(1, 7410372646555580749),
             name: 'id',
             type: 6,
             flags: 1),
         ModelProperty(
-            id: const IdUid(2, 9009162872063045257),
+            id: const IdUid(2, 8594772438348318397),
             name: 'data',
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(3, 714978972398998130),
+            id: const IdUid(3, 4191023267689112879),
             name: 'addDate',
             type: 10,
             flags: 0),
         ModelProperty(
-            id: const IdUid(4, 3682863076651852760),
+            id: const IdUid(4, 5864318801047519503),
             name: 'dueDate',
             type: 10,
             flags: 0),
         ModelProperty(
-            id: const IdUid(5, 7065013727251594556),
-            name: 'categoryId',
-            type: 11,
-            flags: 520,
-            indexId: const IdUid(1, 7868489815282846966),
-            relationTarget: 'Category'),
+            id: const IdUid(5, 5256682116376502868),
+            name: 'time',
+            type: 9,
+            flags: 0),
         ModelProperty(
-            id: const IdUid(6, 3450414716264961476),
+            id: const IdUid(6, 5662722623082263459),
             name: 'isDone',
             type: 1,
             flags: 0),
         ModelProperty(
-            id: const IdUid(7, 7697863442507383534),
-            name: 'time',
-            type: 9,
-            flags: 0)
+            id: const IdUid(7, 6326387507491264020),
+            name: 'categoryId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(1, 469495781288228279),
+            relationTarget: 'Category')
       ],
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[])
@@ -113,8 +113,8 @@ Future<Store> openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(2, 6757674412666348685),
-      lastIndexId: const IdUid(1, 7868489815282846966),
+      lastEntityId: const IdUid(2, 8080901668258035391),
+      lastIndexId: const IdUid(1, 469495781288228279),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
@@ -131,7 +131,7 @@ ModelDefinition getObjectBoxModel() {
         toOneRelations: (Category object) => [],
         toManyRelations: (Category object) => {
               RelInfo<Note>.toOneBacklink(
-                      5, object.id, (Note srcObject) => srcObject.category):
+                      7, object.id, (Note srcObject) => srcObject.category):
                   object.notes
             },
         getId: (Category object) => object.id,
@@ -161,7 +161,7 @@ ModelDefinition getObjectBoxModel() {
               object.notes,
               store,
               RelInfo<Note>.toOneBacklink(
-                  5, object.id, (Note srcObject) => srcObject.category),
+                  7, object.id, (Note srcObject) => srcObject.category),
               store.box<Category>());
           return object;
         }),
@@ -182,9 +182,9 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(1, dataOffset);
           fbb.addInt64(2, object.addDate?.millisecondsSinceEpoch);
           fbb.addInt64(3, object.dueDate.millisecondsSinceEpoch);
-          fbb.addInt64(4, object.category.targetId);
+          fbb.addOffset(4, timeOffset);
           fbb.addBool(5, object.isDone);
-          fbb.addOffset(6, timeOffset);
+          fbb.addInt64(6, object.category.targetId);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -203,11 +203,11 @@ ModelDefinition getObjectBoxModel() {
               dueDate: DateTime.fromMillisecondsSinceEpoch(
                   const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0)),
               time: const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 16))
+                  .vTableGetNullable(buffer, rootOffset, 12))
             ..isDone =
                 const fb.BoolReader().vTableGet(buffer, rootOffset, 14, false);
           object.category.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
           object.category.attach(store);
           return object;
         })
@@ -243,13 +243,13 @@ class Note_ {
   /// see [Note.dueDate]
   static final dueDate = QueryIntegerProperty<Note>(_entities[1].properties[3]);
 
-  /// see [Note.category]
-  static final category =
-      QueryRelationToOne<Note, Category>(_entities[1].properties[4]);
+  /// see [Note.time]
+  static final time = QueryStringProperty<Note>(_entities[1].properties[4]);
 
   /// see [Note.isDone]
   static final isDone = QueryBooleanProperty<Note>(_entities[1].properties[5]);
 
-  /// see [Note.time]
-  static final time = QueryStringProperty<Note>(_entities[1].properties[6]);
+  /// see [Note.category]
+  static final category =
+      QueryRelationToOne<Note, Category>(_entities[1].properties[6]);
 }

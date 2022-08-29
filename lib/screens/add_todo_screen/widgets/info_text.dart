@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:for21day/variables/text_styles.dart';
+import 'package:Todo/variables/text_styles.dart';
 
 class InfoText extends StatelessWidget {
   const InfoText({Key? key, required this.text}) : super(key: key);
